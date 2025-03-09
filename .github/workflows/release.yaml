@@ -146,30 +146,14 @@ jobs:
     runs-on: ubuntu-latest
 
     container: 
-      image: debian:bookworm
+      image: "Dockerfile.debian_bookwork"
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install basic dependencies
-        id: install-software
+      - name: Import Rust environment
         run: |
-          export DEBIAN_FRONTEND=noninteractive
-          apt-get update
-          apt-get install -y wget git lsb-release wget software-properties-common gnupg curl build-essential devscripts debhelper
-
-      - name: Install build dependencies
-        id: install-build-deps
-        run: |
-          export DEBIAN_FRONTEND=noninteractive
-          apt-get update
-          apt-get install -y pkg-config libclang-dev libiio-dev libudev-dev libevdev-dev
-
-      - name: Install Rust and Cargo
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
           . $HOME/.cargo/env
 
       - name: Install cargo-deb
@@ -191,31 +175,15 @@ jobs:
     if: needs.release.outputs.should_publish == 'yes'
     runs-on: ubuntu-latest
 
-    container: 
-      image: ubuntu:noble
+    container:
+      image: "Dockerfile.ubuntu_noble"
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install basic dependencies
-        id: install-software
+      - name: Import Rust environment
         run: |
-          export DEBIAN_FRONTEND=noninteractive
-          apt-get update
-          apt-get install -y wget git lsb-release wget software-properties-common gnupg curl build-essential devscripts debhelper
-
-      - name: Install build dependencies
-        id: install-build-deps
-        run: |
-          export DEBIAN_FRONTEND=noninteractive
-          apt-get update
-          apt-get install -y pkg-config libclang-dev libiio-dev libudev-dev libevdev-dev
-
-      - name: Install Rust and Cargo
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
           . $HOME/.cargo/env
 
       - name: Install cargo-deb

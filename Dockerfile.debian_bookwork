@@ -1,4 +1,4 @@
-FROM rust:1.84
+FROM debian:bookwork
 
 RUN apt-get update && apt-get install -y \
   wget \
