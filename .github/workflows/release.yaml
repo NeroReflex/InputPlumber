@@ -14,6 +14,33 @@ on:
 
 # Jobs to run
 jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: "Dockerfile.ubuntu_noble"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Import Rust environment
+        run: |
+          . $HOME/.cargo/env
+
+      - name: Install cargo-deb
+        run: cargo install cargo-deb
+
+      - name: Build Debian package
+        run: cargo deb
+
+      - name: Upload Debian package
+        uses: actions/upload-artifact@v4
+        with:
+          name: inputplumber_ubuntu-noble_amd64.deb
+          path: target/debian/inputplumber_*.deb
+          if-no-files-found: error
+
   release:
     name: 🎉 Publish to GitHub
     runs-on: ubuntu-latest
